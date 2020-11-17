@@ -59,15 +59,17 @@ class LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Image.asset('assets/images/pigeon.png',height: 150,width: 150,),
-                  //Text('E-Pigeon',style: TextStyle(color:Theme.of(context).primaryColor,fontSize: 82,fontFamily: "Signatra"),),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Image.asset('assets/images/animpigeon.gif',height: 150,width: 200,),
+                    //Text('E-Pigeon',style: TextStyle(color:Theme.of(context).primaryColor,fontSize: 82,fontFamily: "Signatra"),),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(1.0),
                   child: Container(
-                    margin: EdgeInsets.only(left: 30, top: 20, right: 30,),
+                    margin: EdgeInsets.only(left: 30, top: 10, right: 30,),
                     height: 320,//double.infinity,
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -95,7 +97,9 @@ class LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('Login',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 30),),
+                              Text('Login to e-pigeon',
+                                style: TextStyle(color: Theme.of(context)
+                                    .primaryColor,fontSize: 25,fontFamily: "Royalacid",fontWeight: FontWeight.bold),),
                               SizedBox(height: 10,),
                               TextFormField(
                                 decoration: InputDecoration(
@@ -141,13 +145,14 @@ class LoginScreenState extends State<LoginScreen> {
                               SizedBox(height: 10,),
                               Container(
                                 width: double.infinity,
+                                height: 45,
                                 child: RaisedButton(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
+                                      borderRadius: BorderRadius.circular(30)),
                                   color: Theme.of(context).primaryColor,
                                   child: Text(
                                     "Login",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.white,fontSize: 25),
                                   ),
                                   onPressed: () {
                                     setState(() {

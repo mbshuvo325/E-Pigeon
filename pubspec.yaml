@@ -33,6 +33,7 @@ dependencies:
   flutter_local_notifications: ^3.0.1
   photo_view: ^0.10.2
   flutter_spinkit: ^4.1.2+1
+  flutter_offline: "^0.3.0"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -63,6 +64,8 @@ flutter:
   assets:
     - assets/images/google_signin_button.png
     - assets/images/pigeon.png
+    - assets/images/animpigeon.gif
+    - assets/images/repigeon.gif
     - images/mimi1.gif
     - images/mimi2.gif
     - images/mimi3.gif
@@ -72,6 +75,7 @@ flutter:
     - images/mimi7.gif
     - images/mimi8.gif
     - images/mimi9.gif
+    - images/img_not_available.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

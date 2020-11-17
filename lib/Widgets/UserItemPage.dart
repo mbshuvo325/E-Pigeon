@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,18 +17,16 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItemState extends State<UserItem> {
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        /*DBFirebaseHelper.deleteUser(widget.user.id).then((value) {
-          setState(() {
-
-          });
-        });*/
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => InitilizeProfile()));
         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-            Chat(riciverId :widget.user.id , riciverName: widget.user.nickname, senderId: AuthenticationService.getCurrentUser().uid)));
+            Chat(riciverId :widget.user.id ,
+                imageUrl: widget.user.photoUrl,
+                riciverName: widget.user.nickname,
+                senderId: AuthenticationService.getCurrentUser().uid)));
       },
       child: Padding(
         padding: const EdgeInsets.all(1.0),
@@ -54,15 +53,16 @@ class _UserItemState extends State<UserItem> {
           ),
           child: ListTile(
             leading: Container(
-              height: 50,
-              width: 50,
+             // margin: EdgeInsets.only(left: 5, top: 5),
+              height: 55,
+              width: 55,
              decoration: BoxDecoration(
-               border: Border.all(color: Colors.grey,width: 2),
+              // border: Border.all(color: Colors.grey,width: 2),
                borderRadius: BorderRadius.circular(30)
              ),
-              /*child: widget.user.photoUrl == null ? Icon(Icons.account_circle,size: 50,) : CircleAvatar(
+              child: widget.user.photoUrl == null ? Center(child: Icon(Icons.account_circle,size: 55,color: Colors.lightBlueAccent,)) : CircleAvatar(
                 backgroundImage: CachedNetworkImageProvider(widget.user.photoUrl),
-              ),*/
+              ),
             ),
             title: Text(widget.user.nickname),
             subtitle: Text(widget.user.aboutme),

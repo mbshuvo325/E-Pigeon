@@ -5,6 +5,13 @@ class TUser {
    String photoUrl;
    String createdAt;
    String aboutme;
+   //
+   String gender;
+   String homeTowen;
+   String school;
+   String highschool;
+   String university;
+   String workAt;
 
   TUser({
     this.id,
@@ -12,6 +19,13 @@ class TUser {
     this.photoUrl,
     this.createdAt,
     this.aboutme,
+    ///
+    this.gender,
+    this.homeTowen,
+    this.school,
+    this.highschool,
+    this.university,
+    this.workAt
   });
 
   Map<String, dynamic> toMap(){
@@ -20,6 +34,13 @@ class TUser {
       "photoUrl" : photoUrl,
       "createdAt" : createdAt,
       "aboutme" : aboutme,
+      //
+      "gender" : gender,
+      "homeTowen" : homeTowen,
+      "school" : school,
+      "highschool" : highschool,
+      "university" : university,
+      "workAt" : workAt
     };
     if(id != null){
       map["id"] = id;
@@ -32,6 +53,14 @@ class TUser {
     photoUrl = map["photoUrl"];
     createdAt = map["createdAt"];
     aboutme = map["aboutme"];
+    ///
+    gender = map["gender"];
+    homeTowen = map["homeTowen"];
+    school = map["school"];
+    highschool = map["highschool"];
+    university = map["university"];
+    workAt = map["workAt"];
+
   }
 
   factory TUser.fromDocument(DocumentSnapshot doc) {
@@ -40,6 +69,12 @@ class TUser {
       photoUrl: doc['photoUrl'],
       nickname: doc['nickname'],
       createdAt: doc['createdAt'],
+      gender: doc['gender'],
+      homeTowen: doc['homeTowen'],
+      school: doc['school'],
+      highschool: doc['highschool'],
+      university: doc['university'],
+      workAt: doc['workAt'],
     );
   }
 }

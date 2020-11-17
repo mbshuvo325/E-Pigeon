@@ -1,6 +1,5 @@
 
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,28 +10,37 @@ import 'package:telegramchatapp/Pages/HomePage.dart';
 import 'package:telegramchatapp/Widgets/ProgressWidget.dart';
 
 class InitilizeProfile extends StatefulWidget {
-  final String userId;
-
+  final String userID;
 
   InitilizeProfile({
-    Key key,
-    @required this.userId
-});
-
+    Key key, @required this.userID
+  }):super(key : key);
   @override
-  _InitilizeProfileState createState() => _InitilizeProfileState(userId : userId);
+  _InitilizeProfileState createState() => _InitilizeProfileState(userId : userID);
 }
 
 class _InitilizeProfileState extends State<InitilizeProfile> {
-
   final String userId;
+
   _InitilizeProfileState({
-    Key key,
-    @required this.userId,
-});
+    Key key, @required this.userId
+  });
+
+  @override
+  void initState() {
+    setState(() {
+
+    });
+    super.initState();
+  }
+  @override
+  void didChangeDependencies() async{
+    super.didChangeDependencies();
+  }
+
   final _formKey = GlobalKey<FormState>();
   TUser user;
-  String aboutme = " ";
+  String aboutme;
   String _imagePath;
   String imageUrl;
   bool isLoading = false;
@@ -42,8 +50,8 @@ class _InitilizeProfileState extends State<InitilizeProfile> {
     if(_formKey.currentState.validate()){
       _formKey.currentState.save();
       try{
-        await DBFirebaseHelper.updatePhoto(userId, _imagePath);
-        await DBFirebaseHelper.aboutMe(userId, aboutme).then((_){
+        await DBFirebaseHelper.UpdateBio(userId, aboutme);
+        await DBFirebaseHelper.updatePhoto(userId, imageUrl).then((_){
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
         });
       }catch(error){
@@ -56,7 +64,6 @@ class _InitilizeProfileState extends State<InitilizeProfile> {
      await ImagePicker().getImage(source: ImageSource.gallery).then((imageFile){
        setState(() {
          _imagePath = imageFile.path;
-         user.photoUrl = _imagePath;
          isLoading = true;
          upLoadImageToFireStore();
        });
@@ -70,8 +77,8 @@ class _InitilizeProfileState extends State<InitilizeProfile> {
     final snapshot = await upLoadTask.onComplete;
      final url = await snapshot.ref.getDownloadURL();
      setState(() {
-       user.photoUrl = url.toString();
        isLoading = false;
+       imageUrl = url;
      });
   }
 
@@ -82,10 +89,22 @@ class _InitilizeProfileState extends State<InitilizeProfile> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Center(
+                  child: Text("Welcome To E-Pigeon",
+                    style: TextStyle(fontSize: 30,color: Colors.lightBlueAccent),)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Center(
+                  child: Text("Please SetUp Your Profile",
+                    style: TextStyle(fontSize: 15,color: Colors.green),)),
+            ),
             Center(
               child: Container(
                 margin: EdgeInsets.only(left: 30, top: 20, right: 30,),
-                height: 320,
+                height: 350,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -104,65 +123,71 @@ class _InitilizeProfileState extends State<InitilizeProfile> {
                     ),
                   ],
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: Colors.lightBlueAccent),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: _imagePath == null
-                          ? Text('Upload an Image',textAlign: TextAlign.center,)
-                          : Image.file(File(_imagePath),fit: BoxFit.cover,),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.camera_alt),
-                      onPressed: (){
-                        getImage();
-                      },
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          labelText: "Set Your Status",
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30, left: 20,right: 20),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 2,color: Colors.lightBlueAccent),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            setState(() {
-                              isLoading = false;
-                            });
-                            return "Status Should't be empty!";
-                          }
-                        },
-                        onSaved: (value){
-                          aboutme = value;
+                        child: _imagePath == null
+                            ? Text('Upload an Image',textAlign: TextAlign.center,)
+                            : Image.file(File(_imagePath),fit: BoxFit.cover,),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.camera_alt,size: 40,color: Colors.lightBlueAccent,),
+                        onPressed: (){
+                         getImage();
                         },
                       ),
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      color: Theme.of(context).primaryColor,
-                      child: Text(
-                        "Register",
-                        style: TextStyle(color: Colors.white),
+                      SizedBox(height: 15,),
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            labelText: "Set Your Status",
+                          ),
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                              return "Status Should't be empty!";
+                            }
+                          },
+                          onSaved: (value){
+                            aboutme = value;
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        _authenticate();
-                      },
-                    ),
-                  ],
+                      SizedBox(height: 15,),
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        color: Theme.of(context).primaryColor,
+                        child: Text(
+                          "Set Profile",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          print(userId);
+                          _authenticate();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

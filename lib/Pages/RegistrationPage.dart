@@ -22,6 +22,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String email = '';
   String password = '';
   String uid;
+  String docid = '';
   String _errorMsg = '';
   String _date = DateTime.now().millisecondsSinceEpoch.toString();
   String _status = 'I am avilable';
@@ -34,12 +35,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         user.aboutme = _status;
         uid = await AuthenticationService.register(email, password);
         DBFirebaseHelper.insertUser(user).then((_){
-          Fluttertoast.showToast(msg: 'Registration Successfull');
         });
-        if(uid != null){
+        if(docid != null){
           isLoading = false;
-
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => InitilizeProfile(userID: uid)));
         }
       }catch(error){
         setState(() {
@@ -63,7 +62,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: Image.asset('assets/images/pigeon.png',height: 100,width: 100,),
+                  child: Image.asset('assets/images/animpigeon.gif',height: 100,width: 100,),
                   //Text('E-Pigeon',style: TextStyle(color:Theme.of(context).primaryColor,fontSize: 52,fontFamily: "Signatra"),),
                 ),
                 Padding(
